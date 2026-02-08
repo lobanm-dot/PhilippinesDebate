@@ -173,7 +173,8 @@
             currentSpeakerIndex: 0,
             meterValue: 0, // -50 to 50
             finalVote: null,
-            justification: ''
+            justification: '',
+            submitted: false // Tracks if they have finalized their answer
         };
 
         // --- RENDER FUNCTIONS ---
@@ -325,7 +326,61 @@
             `;
         }
 
+        function renderReportCard() {
+             return `
+            <div class="animate-fade-in space-y-8">
+                <div class="bg-white p-8 md:p-12 rounded-xl shadow-2xl text-center max-w-3xl mx-auto border-t-8 border-slate-900">
+                    <h2 class="text-3xl font-serif font-bold text-slate-900 mb-6">Activity Complete</h2>
+                    
+                    <div class="bg-amber-50 p-8 rounded-lg border-2 border-amber-300 text-left shadow-inner">
+                        <div class="flex justify-between items-center border-b-2 border-amber-200 pb-4 mb-6">
+                            <h3 class="text-xl font-bold text-slate-900 uppercase tracking-widest">Official Student Record</h3>
+                            <i data-lucide="file-check" class="w-8 h-8 text-amber-600"></i>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <span class="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-1">Final Vote</span>
+                                <div class="text-2xl font-serif font-bold ${state.finalVote === 'annex' ? 'text-blue-800' : 'text-red-800'}">
+                                    ${state.finalVote === 'annex' ? 'ANNEXATION' : 'INDEPENDENCE'}
+                                </div>
+                            </div>
+                            <div>
+                                <span class="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-1">Attitude Score</span>
+                                <div class="text-2xl font-serif font-bold text-slate-800">
+                                    ${state.meterValue > 0 ? '+' : ''}${state.meterValue}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <span class="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-2">Student Justification</span>
+                            <div class="bg-white p-6 rounded border border-slate-200 font-serif text-lg text-slate-800 whitespace-pre-wrap leading-relaxed">
+                                ${state.justification}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 bg-blue-50 text-blue-800 p-4 rounded-lg flex items-center justify-center gap-3">
+                        <i data-lucide="camera" class="w-6 h-6"></i>
+                        <span class="font-bold">Please take a screenshot of this record to submit to your teacher.</span>
+                    </div>
+
+                </div>
+
+                <button onclick="resetApp()" class="flex items-center gap-2 mx-auto text-slate-500 hover:text-slate-800 transition-colors">
+                    <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Restart Forum
+                </button>
+            </div>
+            `;
+        }
+
         function renderConclusion() {
+            // If they have already submitted, show the report card view
+            if (state.submitted) {
+                return renderReportCard();
+            }
+
             let leaning = 'Neutral';
             if (state.meterValue > 10) leaning = 'Strongly Annexationist';
             else if (state.meterValue > 0) leaning = 'Leaning Annexationist';
@@ -389,11 +444,8 @@
                             ${submitDisabled ? 'disabled' : ''}
                             class="w-full bg-slate-900 disabled:bg-slate-400 text-white font-bold text-lg py-4 px-6 rounded-lg shadow-lg hover:bg-slate-800 transition-colors flex items-center justify-center gap-2"
                         >
-                            <i data-lucide="send" class="w-5 h-5"></i> Submit to lobanm@cvcolonials.org
+                            <i data-lucide="check-circle" class="w-5 h-5"></i> Finalize Response
                         </button>
-                        <p class="text-center text-xs text-slate-400 mt-2">
-                            This will open your email client to send your response.
-                        </p>
                     </div>
                 </div>
 
@@ -468,19 +520,12 @@
         }
 
         function submitFinalVote() {
-            const subject = encodeURIComponent("Vote on Philippines Annexation");
-            const body = encodeURIComponent(
-`My Vote: ${state.finalVote === 'annex' ? 'ANNEX THE PHILIPPINES' : 'GRANT INDEPENDENCE'}
-
-Justification:
-${state.justification}
-
----
-Attitude Meter Score: ${state.meterValue} (Scale: -50 Independence to +50 Annexation)
-Completed on: ${new Date().toLocaleDateString()}`
-            );
+            // Update state to show the report card
+            state.submitted = true;
+            render();
             
-            window.location.href = `mailto:lobanm@cvcolonials.org?subject=${subject}&body=${body}`;
+            // Scroll to top to see the result
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function resetApp() {
@@ -489,7 +534,8 @@ Completed on: ${new Date().toLocaleDateString()}`
                 currentSpeakerIndex: 0,
                 meterValue: 0,
                 finalVote: null,
-                justification: ''
+                justification: '',
+                submitted: false
             };
             render();
         }

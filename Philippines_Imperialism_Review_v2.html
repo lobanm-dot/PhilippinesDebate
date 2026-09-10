@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>1898: Empire or Republic?</title>
+<style>
+:root{
+  --bg:#07111f;--panel:#0d1a2b;--panel2:#12233a;--paper:#f4efe4;--paper2:#fffaf0;
+  --ink:#111827;--muted:#8390a3;--gold:#e4b95f;--gold2:#ffda7d;--red:#bc4b51;--blue:#3c7ab7;
+  --green:#4e9c79;--line:rgba(255,255,255,.12);--shadow:0 26px 70px rgba(0,0,0,.28);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:
+  radial-gradient(circle at 20% 0%,rgba(60,122,183,.16),transparent 34rem),
+  radial-gradient(circle at 95% 20%,rgba(228,185,95,.10),transparent 28rem),
+  var(--bg);color:#ecf2f8;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
+button{font:inherit}button:focus-visible{outline:3px solid var(--gold2);outline-offset:3px}
+a{color:inherit}.hidden{display:none!important}
+.shell{max-width:1180px;margin:auto;padding:22px 22px 70px}
+.topbar{position:sticky;top:0;z-index:80;background:rgba(7,17,31,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.topinner{max-width:1180px;margin:auto;padding:10px 22px 9px;display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center}
+.brand{font-family:Georgia,serif;font-weight:900;letter-spacing:.02em}.brand em{font-style:normal;color:var(--gold)}
+.chapterTrack{display:flex;justify-content:center;gap:7px}.chapterDot{height:7px;width:36px;background:#ffffff18;border-radius:999px;overflow:hidden}.chapterDot.on{background:var(--gold)}
+.hud{display:flex;gap:8px;align-items:center;font-size:.82rem;font-weight:850}.hudPill{border:1px solid #ffffff1f;background:#ffffff0a;border-radius:999px;padding:7px 10px}.hudPill strong{color:var(--gold2)}
+
+/* INTRO */
+.hero{min-height:690px;border:1px solid var(--line);border-radius:28px;overflow:hidden;box-shadow:var(--shadow);position:relative;background:#0f2034;margin-top:20px}
+.heroMedia{position:absolute;inset:0;display:grid;grid-template-columns:1.1fr .9fr;opacity:.78}
+.heroMedia .map,.heroMedia .cartoon{position:relative;overflow:hidden}.heroMedia img{width:100%;height:100%;object-fit:cover;filter:saturate(.78) contrast(1.05)}
+.heroMedia .map:after,.heroMedia .cartoon:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(7,17,31,.35),rgba(7,17,31,.62))}
+.heroMedia .cartoon:after{background:linear-gradient(90deg,rgba(7,17,31,.65),rgba(7,17,31,.25))}
+.heroShade{position:absolute;inset:0;background:linear-gradient(90deg,#07111ff2 0,#07111fcf 43%,#07111f68 100%),linear-gradient(0deg,#07111fdd,transparent 55%)}
+.heroCopy{position:relative;z-index:3;max-width:690px;padding:76px 66px}
+.kicker{text-transform:uppercase;letter-spacing:.18em;color:var(--gold2);font-size:.76rem;font-weight:950}
+h1{font:900 clamp(3.2rem,7vw,6.4rem)/.88 Georgia,serif;letter-spacing:-.055em;margin:12px 0 19px}.hero p{font-size:1.08rem;line-height:1.65;color:#d4deea;max-width:650px}
+.alert{display:inline-flex;align-items:center;gap:9px;margin:19px 0 6px;border:1px solid #ffffff1f;background:#081522b8;padding:9px 12px;border-radius:10px;font-size:.82rem;color:#dbe5ef}
+.modeRow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:25px 0 18px;max-width:640px}.mode{background:#ffffff09;color:white;border:1px solid #ffffff1e;border-radius:15px;padding:15px 16px;text-align:left;cursor:pointer;transition:.18s}.mode:hover,.mode.selected{border-color:var(--gold);background:#ffffff13;transform:translateY(-2px)}.mode b{display:block;font-size:.96rem}.mode span{display:block;margin-top:4px;font-size:.79rem;line-height:1.4;color:#aebbd0}
+.primary{border:0;background:linear-gradient(135deg,var(--gold),#f0ce7d);color:#172033;font-weight:950;border-radius:13px;padding:14px 20px;cursor:pointer;box-shadow:0 12px 24px #0004;transition:.18s}.primary:hover{transform:translateY(-2px);filter:brightness(1.04)}
+.ghost{border:1px solid #ffffff22;background:#ffffff08;color:#ecf2f8;font-weight:850;border-radius:12px;padding:12px 15px;cursor:pointer}.ghost:hover{background:#ffffff10}.smallBtn{padding:9px 12px;font-size:.82rem}
+.heroCredit{position:absolute;right:18px;bottom:14px;z-index:5;color:#c6d1dd;font-size:.68rem;background:#07111fb8;border:1px solid #ffffff1a;padding:6px 8px;border-radius:8px}
+
+/* COMMON SCREENS */
+.screen{display:none}.screen.active{display:block;animation:fadeUp .35s ease}@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.chapterHead{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end;margin:36px 0 18px}.chapterNo{font-size:.72rem;color:var(--gold2);text-transform:uppercase;letter-spacing:.18em;font-weight:950}.chapterHead h2{font:900 clamp(2.25rem,5vw,4.5rem)/.95 Georgia,serif;margin:6px 0 10px;letter-spacing:-.04em}.chapterHead p{margin:0;max-width:740px;color:#aab7c8;line-height:1.56}.chapterIcon{font:900 4.5rem/1 Georgia,serif;color:#ffffff0b}
+.layout2{display:grid;grid-template-columns:1.05fr .95fr;gap:16px}.panel{background:linear-gradient(180deg,#102039,#0c1a2c);border:1px solid var(--line);border-radius:20px;box-shadow:0 15px 36px #0002;overflow:hidden}.panelPad{padding:22px}.panelLabel{text-transform:uppercase;letter-spacing:.16em;color:var(--gold2);font-size:.69rem;font-weight:950}.panelTitle{font:900 1.7rem/1.1 Georgia,serif;margin:7px 0}.panelSub{color:#91a0b4;line-height:1.5;font-size:.9rem}
+.paper{background:var(--paper2);color:var(--ink);border-radius:18px;border:1px solid #d9ccb3;box-shadow:0 14px 35px #0002}.paperPad{padding:22px}
+.artifact{position:relative;min-height:370px;background:#101a26;overflow:hidden}.artifact img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}.artifact:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(7,17,31,.88),transparent 52%)}.artifactCap{position:absolute;z-index:2;left:18px;right:18px;bottom:16px}.artifactCap b{font-family:Georgia,serif;font-size:1.15rem}.artifactCap span{display:block;font-size:.76rem;color:#c9d3df;margin-top:3px}.zoom{position:absolute;z-index:3;right:12px;top:12px;background:#07111fcc;border:1px solid #ffffff2c;color:white;border-radius:10px;padding:8px 10px;font-size:.75rem;font-weight:850;cursor:pointer}
+.prompt{font:850 1.17rem/1.44 Georgia,serif;margin:15px 0}.choices{display:grid;grid-template-columns:1fr 1fr;gap:9px}.choice{border:1.5px solid #c6ced8;border-radius:12px;background:white;color:#182234;padding:12px 13px;text-align:left;font-weight:800;cursor:pointer;transition:.15s}.choice:hover{transform:translateY(-1px);border-color:#68788d}.choice.correct{border-color:#4b956f;background:#ecf8f1}.choice.wrong{border-color:#bb5457;background:#fff0ef}.choice:disabled{cursor:default;transform:none}.feedback{display:none;margin-top:12px;padding:12px 14px;background:#f8efcf;color:#172033;border-left:4px solid #d8a83f;border-radius:8px;font-size:.92rem;line-height:1.5;font-weight:650}.feedback.show{display:block}.clue{display:none;margin-top:10px;padding:10px 12px;background:#e9eef4;border-radius:9px;color:#425066;font-size:.84rem}.academic .clue{display:block}
+.actionRow{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:16px}.right{margin-left:auto}.micro{font-size:.76rem;color:#8593a5;line-height:1.45}
+
+/* CUBA */
+.amendmentGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.amendment{background:#fff;color:#121a26;border-radius:15px;border:1px solid #d8ccb6;padding:18px;min-height:210px;position:relative;overflow:hidden}.amendment:before{content:"";position:absolute;width:100px;height:100px;border:18px solid #9d262620;border-radius:50%;right:-28px;top:-35px;transform:rotate(-15deg)}.amendment h3{font:900 1.65rem Georgia,serif;margin:7px 0}.year{font-weight:950;color:#9b3a39;font-size:.78rem;letter-spacing:.1em}.amendment p{font-size:.9rem;line-height:1.48;color:#4c5563}.dropLabel{font-size:.74rem;font-weight:900;letter-spacing:.11em;text-transform:uppercase;color:#6c7685;margin:10px 0 6px}.tagChoice{display:flex;gap:7px}.tagBtn{flex:1;border:1.5px solid #bdc5d0;background:#fff;border-radius:9px;padding:9px;font-weight:850;cursor:pointer}.tagBtn.correct{background:#e7f6ed;border-color:#478f69}.tagBtn.wrong{background:#ffefed;border-color:#b55051}
+
+/* MAP / TERRITORIES */
+.mapStage{min-height:530px;position:relative;background:#0d1a2c}.mapStage img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;filter:saturate(.85) contrast(1.03)}.mapStage:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#07111fd4,transparent 60%)}.mapOverlay{position:absolute;z-index:2;left:16px;right:16px;bottom:16px;background:#07111fd9;border:1px solid #ffffff20;border-radius:15px;padding:16px}.mapOverlay b{font:900 1.25rem Georgia,serif}.mapOverlay p{margin:5px 0 0;color:#bdc9d7;font-size:.82rem;line-height:1.45}
+.territoryGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.territory{background:#fff;color:#172033;border-radius:14px;padding:15px;border:1px solid #d7ccba}.territoryTop{display:flex;align-items:center;justify-content:space-between;gap:10px}.territory h3{font:900 1.35rem Georgia,serif;margin:0}.territory .mini{font-size:.76rem;color:#6c7684;margin-top:4px;line-height:1.4}.outcomes{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.pill{border:1px solid #bcc5cf;border-radius:999px;background:white;padding:7px 9px;font-size:.73rem;font-weight:850;cursor:pointer}.pill.correct{background:#e8f6ee;border-color:#438c68}.pill.wrong{background:#fff0ee;border-color:#b64f53}.reveal{display:none;border-top:1px dashed #d2c5ae;margin-top:10px;padding-top:9px;font-size:.76rem;line-height:1.45;color:#596270}.reveal.show{display:block}
+
+/* CARTOON CHALLENGE */
+.cartoonChallenge{display:grid;grid-template-columns:1.12fr .88fr;min-height:560px}.cartoonImage{position:relative;background:#151a20}.cartoonImage img{width:100%;height:100%;object-fit:contain;position:absolute;inset:0;background:#e8e2d8}.cartoonQuestion{padding:26px;background:linear-gradient(180deg,#13243b,#0c192b)}.cartoonQuestion h3{font:900 2rem/1.05 Georgia,serif;margin:8px 0 12px}.sourceBadge{display:inline-block;border:1px solid #ffffff24;border-radius:999px;padding:6px 9px;font-size:.69rem;color:#cbd5e1}.cartoonChoices{display:grid;gap:9px;margin-top:18px}.darkChoice{background:#ffffff08;border:1px solid #ffffff20;color:#ecf2f8;border-radius:12px;padding:12px 13px;text-align:left;font-weight:750;cursor:pointer}.darkChoice:hover{background:#ffffff10}.darkChoice.correct{border-color:#5db487;background:#4e9c7924}.darkChoice.wrong{border-color:#cf6469;background:#bc4b5120}
+
+/* DEBATE */
+.debateIntro{display:grid;grid-template-columns:1.04fr .96fr;gap:16px}.locker{position:sticky;top:84px;background:linear-gradient(180deg,#13233a,#0d1a2b);border:1px solid var(--line);border-radius:18px;padding:16px;align-self:start}.lockerHead{display:flex;justify-content:space-between;align-items:center}.locker h3{font:900 1.2rem Georgia,serif;margin:0}.lockerCount{color:var(--gold2);font-size:.8rem;font-weight:900}.lockerItems{display:grid;gap:7px;margin-top:10px}.lockerItem{border:1px solid #ffffff18;background:#ffffff07;border-radius:10px;padding:9px;font-size:.75rem;line-height:1.35;color:#c6d0dd}.lockerEmpty{color:#718096;font-size:.78rem;line-height:1.45}
+.roundWrap{margin-top:16px}.roundHeader{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:9px}.roundHeader b{font-family:Georgia,serif;font-size:1.2rem}.roundHeader span{font-size:.75rem;color:#8ea0b5}
+.faceoff{display:grid;grid-template-columns:1fr 64px 1fr;gap:0;align-items:stretch}.vs{display:flex;align-items:center;justify-content:center;font:900 1.2rem Georgia,serif;color:var(--gold2);position:relative}.vs:before{content:"";position:absolute;top:0;bottom:0;width:1px;background:#ffffff16}.vs span{position:relative;background:var(--bg);border:1px solid #ffffff1b;border-radius:999px;width:44px;height:44px;display:grid;place-items:center}
+.speakerCard{background:#fff;color:#111827;border-radius:18px;overflow:hidden;border:1px solid #d7cbb6;box-shadow:0 12px 28px #0002}.speakerVisual{height:260px;position:relative;background:#18283c;overflow:hidden}.speakerVisual img{width:100%;height:100%;object-fit:cover;filter:grayscale(100%) contrast(1.04)}.speakerVisual:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#0b172be8,transparent 62%)}.speakerName{position:absolute;z-index:2;bottom:14px;left:15px;right:15px;color:white}.speakerName h4{font:900 1.55rem Georgia,serif;margin:0}.speakerName span{font-size:.76rem;color:#d1d9e3}.speakerBody{padding:16px}.stanceTag{display:inline-block;font-size:.68rem;font-weight:950;letter-spacing:.09em;text-transform:uppercase;color:#5d6877}.argument{font:750 .98rem/1.52 Georgia,serif;margin:9px 0 11px;color:#273140}.argNote{font-size:.68rem;color:#7b8490;border-top:1px solid #e1d9cc;padding-top:8px}.motiveLabel{margin-top:12px;font-size:.67rem;text-transform:uppercase;letter-spacing:.1em;font-weight:900;color:#6a7481}.motiveChoices{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px}.motiveBtn{border:1px solid #c8ced6;background:#fff;border-radius:8px;padding:9px 10px;font-size:.76rem;font-weight:800;text-align:left;cursor:pointer}.motiveBtn:hover{border-color:#7a899b}.motiveBtn.correct{background:#e8f7ef;border-color:#4d9570}.motiveBtn.wrong{background:#fff0ef;border-color:#b95458}
+.roundFeedback{display:none;margin-top:10px;border:1px solid #ffffff1b;background:#ffffff08;border-radius:12px;padding:12px;color:#c9d4df;font-size:.82rem;line-height:1.5}.roundFeedback.show{display:block}.bankBar{display:none;margin-top:10px;background:#101f34;border:1px solid #ffffff18;border-radius:12px;padding:11px}.bankBar.show{display:flex;gap:8px;align-items:center;justify-content:space-between}.bankBar span{font-size:.78rem;color:#cbd5df}.bankBtns{display:flex;gap:6px}.bankBtn{border:1px solid #ffffff24;background:#ffffff08;color:#fff;border-radius:9px;padding:8px 10px;font-size:.72rem;font-weight:900;cursor:pointer}.bankBtn:hover{border-color:var(--gold)}.bankBtn.saved{background:#4e9c7930;border-color:#4e9c79}
+
+/* FINAL */
+.finalChoice{display:grid;grid-template-columns:1fr 1fr;gap:12px}.decision{border:1px solid #ffffff20;background:linear-gradient(180deg,#14263f,#0e1d31);border-radius:17px;padding:20px;color:white;text-align:left;cursor:pointer;transition:.18s}.decision:hover{transform:translateY(-2px);border-color:#ffffff3e}.decision.selected{border-color:var(--gold);box-shadow:0 0 0 3px #e4b95f24}.decision h3{font:900 1.75rem Georgia,serif;margin:0 0 7px}.decision p{margin:0;color:#aebcd0;font-size:.84rem;line-height:1.45}.evidenceFinal{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}.finalEv{border:1px solid #ffffff1c;background:#ffffff08;border-radius:11px;padding:11px;color:#dbe4ee;text-align:left;cursor:pointer;font-size:.78rem;line-height:1.4}.finalEv.selected{border-color:#5aad83;background:#4e9c7920}.finalPrompt{margin-top:15px;background:#f7f0de;color:#152033;border-radius:14px;padding:16px;font:700 .95rem/1.5 Georgia,serif}.finalPrompt b{color:#9b3d3d}.result{background:linear-gradient(135deg,#172d4b,#0c1a2c);border:1px solid var(--line);border-radius:24px;padding:30px;box-shadow:var(--shadow)}.rank{font:900 clamp(2.4rem,5vw,4rem)/1 Georgia,serif;color:var(--gold2);margin:8px 0}.historyReveal{margin-top:18px;background:#fffaf0;color:#172033;border-radius:16px;padding:20px;line-height:1.58}.historyReveal h3{font:900 1.45rem Georgia,serif;margin:0 0 8px}.badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.badge{border:1px solid #ffffff25;background:#ffffff08;border-radius:999px;padding:7px 10px;font-size:.75rem;font-weight:850}.sources{margin-top:20px}.sources details{border:1px solid #ffffff17;background:#ffffff07;border-radius:12px;padding:12px}.sources summary{cursor:pointer;font-weight:850}.sources ul{font-size:.76rem;color:#aab8c9;line-height:1.5;padding-left:20px}.sources a{text-decoration:underline}
+
+/* MODAL */
+.modal{position:fixed;inset:0;z-index:200;background:#02060bea;display:none;align-items:center;justify-content:center;padding:24px}.modal.show{display:flex}.modalInner{max-width:1050px;width:100%;max-height:92vh;position:relative}.modalInner img{width:100%;max-height:86vh;object-fit:contain;background:#111;border-radius:14px}.closeModal{position:absolute;right:10px;top:10px;background:#07111fe8;color:white;border:1px solid #ffffff35;border-radius:10px;padding:8px 10px;cursor:pointer}
+
+@media(max-width:900px){.heroMedia{grid-template-columns:1fr}.heroMedia .cartoon{display:none}.heroCopy{padding:55px 35px}.layout2,.cartoonChallenge,.debateIntro{grid-template-columns:1fr}.faceoff{grid-template-columns:1fr}.vs{height:54px}.vs:before{left:0;right:0;top:50%;width:auto;height:1px}.locker{position:static}.hero{min-height:650px}.chapterHead{grid-template-columns:1fr}.chapterIcon{display:none}}
+@media(max-width:640px){.shell{padding:14px 13px 50px}.topinner{grid-template-columns:1fr auto}.chapterTrack{display:none}.modeRow,.amendmentGrid,.territoryGrid,.choices,.finalChoice,.evidenceFinal{grid-template-columns:1fr}.heroCopy{padding:42px 24px}.hero{min-height:720px}.motiveChoices{grid-template-columns:1fr}.speakerVisual{height:230px}.hudPill:nth-child(2){display:none}}
+</style>
+</head>
+<body>
+<div class="topbar hidden" id="topbar">
+  <div class="topinner">
+    <div class="brand">1898: <em>Empire?</em></div>
+    <div class="chapterTrack" aria-label="progress">
+      <span class="chapterDot" id="dot1"></span><span class="chapterDot" id="dot2"></span><span class="chapterDot" id="dot3"></span><span class="chapterDot" id="dot4"></span>
+    </div>
+    <div class="hud"><span class="hudPill"><strong id="xp">0</strong> XP</span><span class="hudPill">Evidence <strong id="evCount">0</strong>/5</span></div>
+  </div>
+</div>
+
+<main class="shell" id="app">
+  <section class="screen active" id="intro">
+    <div class="hero">
+      <div class="heroMedia" aria-hidden="true">
+        <div class="map"><img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/GreaterAmericaMap.jpg" alt="" /></div>
+        <div class="cartoon"><img src="https://cdn.loc.gov/service/pnp/ppmsca/28600/28668v.jpg" alt="" /></div>
+      </div>
+      <div class="heroShade"></div>
+      <div class="heroCopy">
+        <div class="kicker">Foreign Policy Review · 1898–1901</div>
+        <h1>Empire<br>or Republic?</h1>
+        <p>The war with Spain is over. The U.S. promised not to take Cuba. Puerto Rico and Guam are now under U.S. control. The Philippines is the big question: <strong>Should the U.S. keep it or let Filipinos govern themselves?</strong></p>
+        <div class="alert">◉ Four missions · two primary-source images · five debate face-offs · one final decision</div>
+        <div class="modeRow">
+          <button class="mode selected" id="academicMode" onclick="setMode('academic')"><b>Academic Support</b><span>Clues, simpler choices, and extra help when you need it.</span></button>
+          <button class="mode" id="honorsMode" onclick="setMode('honors')"><b>Honors Challenge</b><span>Fewer clues and more choices to sort through on your own.</span></button>
+        </div>
+        <button class="primary" onclick="startGame()">Begin the 1898 Challenge →</button>
+      </div>
+      <div class="heroCredit">Background: 1899 “Greater America” map + 1899 <em>Puck</em> cartoon</div>
+    </div>
+  </section>
+
+  <section class="screen" id="cuba">
+    <div class="chapterHead"><div><div class="chapterNo">Dossier 01 · Cuba</div><h2>Promise vs. Control</h2><p>The U.S. entered the war saying it would not <strong>annex</strong> (take) Cuba. A few years later, Cuba became independent—but the U.S. kept some power there. Your job: tell the <strong>Teller Amendment</strong> from the <strong>Platt Amendment</strong>.</p></div><div class="chapterIcon">01</div></div>
+    <div class="layout2">
+      <div class="panel panelPad">
+        <div class="panelLabel">Policy Decode</div><div class="panelTitle">Name the amendment</div><div class="panelSub">Use the date and what the amendment actually did.</div>
+        <div class="amendmentGrid" id="amendmentGrid" style="margin-top:15px"></div>
+        <div class="feedback" id="amendFeedback"></div>
+        <div class="actionRow"><span class="micro">Organizer: write one short note about what each amendment did.</span><button class="primary hidden" id="cubaNext" onclick="showScreen('cubaCartoon')">Visual evidence →</button></div>
+      </div>
+      <div class="panel artifact">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Puck_magazine%2C_1901_February_27.jpg" alt="1901 Puck political cartoon showing Uncle Sam and Cuba" />
+        <button class="zoom" onclick="openModal(this.parentElement.querySelector('img').src)">Enlarge</button>
+        <div class="artifactCap"><b>“Encouraging the Child” · 1901</b><span><em>Puck</em> magazine — Cuba portrayed as a child under Uncle Sam’s supervision.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" id="cubaCartoon">
+    <div class="chapterHead"><div><div class="chapterNo">Dossier 01 · Visual Source</div><h2>What changed?</h2><p>Use the cartoon to figure out how Cuba could be independent while the U.S. still had power there.</p></div><div class="chapterIcon">◐</div></div>
+    <div class="panel cartoonChallenge">
+      <div class="cartoonImage"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Puck_magazine%2C_1901_February_27.jpg" alt="Puck cartoon about Cuba and Uncle Sam, 1901"><button class="zoom" onclick="openModal(this.parentElement.querySelector('img').src)">Enlarge</button></div>
+      <div class="cartoonQuestion"><span class="sourceBadge">PRIMARY SOURCE · 1901</span><h3>Which answer best explains the cartoon?</h3><p class="panelSub">Look at who is shown as the adult and who is shown as the child. What does that tell you about who had more power?</p><div class="clue">CLUE: The Platt Amendment did not make Cuba part of the U.S., but it gave the U.S. the right to step into Cuban affairs.</div><div class="cartoonChoices" id="cubaCartoonChoices"></div><div class="feedback" id="cubaCartoonFeedback" style="background:#f8efcf;color:#172033"></div><div class="actionRow"><button class="primary hidden right" id="cartoonNext" onclick="showScreen('treaty')">Next: Treaty of Paris →</button></div></div>
+    </div>
+  </section>
+
+  <section class="screen" id="treaty">
+    <div class="chapterHead"><div><div class="chapterNo">Dossier 02 · Treaty of Paris</div><h2>The Map Changes</h2><p>The Treaty of Paris ended the war in December 1898. Sort what happened to <strong>Cuba, Puerto Rico, Guam, and the Philippines.</strong></p></div><div class="chapterIcon">02</div></div>
+    <div class="layout2">
+      <div class="panel mapStage"><img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/GreaterAmericaMap.jpg" alt="1899 map of Greater America showing U.S. territories and possessions"><button class="zoom" onclick="openModal(this.parentElement.querySelector('img').src)">Enlarge map</button><div class="mapOverlay"><b>Location matters.</b><p>The new territories gave the U.S. a much bigger reach in the Caribbean and Pacific. Think about why these locations could matter for trade and the navy.</p></div></div>
+      <div class="panel panelPad"><div class="panelLabel">Territory Sort</div><div class="panelTitle">What happened after the war?</div><div class="territoryGrid" id="territoryGrid" style="margin-top:14px"></div><div class="actionRow"><span class="micro">Each answer reveals what actually happened.</span><button class="primary hidden" id="treatyNext" onclick="showScreen('philippinesVisual')">Next: The Philippines →</button></div></div>
+    </div>
+  </section>
+
+  <section class="screen" id="philippinesVisual">
+    <div class="chapterHead"><div><div class="chapterNo">Dossier 03 · Philippines</div><h2>Before the Debate: Read the Image</h2><p>This 1899 cartoon came out while Americans argued about overseas expansion. It is useful evidence, but it also uses racist stereotypes and treats colonized people like children.</p></div><div class="chapterIcon">03</div></div>
+    <div class="panel cartoonChallenge">
+      <div class="cartoonImage"><img src="https://cdn.loc.gov/service/pnp/ppmsca/28600/28668v.jpg" alt="School Begins political cartoon, 1899"><button class="zoom" onclick="openModal(this.parentElement.querySelector('img').src)">Enlarge</button></div>
+      <div class="cartoonQuestion"><span class="sourceBadge">LOUIS DALRYMPLE · PUCK · JAN. 25, 1899</span><h3>What problem does this cartoon point out?</h3><p class="panelSub">Uncle Sam is the teacher. Cuba, Puerto Rico, Hawaii, and the Philippines are shown as children who must be taught how to govern.</p><div class="clue">CLUE: Americans said government should depend on the people’s consent. But the cartoon shows Uncle Sam ruling new territories whether they agree or not.</div><div class="cartoonChoices" id="philCartoonChoices"></div><div class="feedback" id="philCartoonFeedback" style="background:#f8efcf;color:#172033"></div><div class="actionRow"><button class="primary hidden right" id="philCartoonNext" onclick="showScreen('debate')">Start the debate →</button></div></div>
+    </div>
+  </section>
+
+  <section class="screen" id="debate">
+    <div class="chapterHead"><div><div class="chapterNo">Dossier 03 · National Debate</div><h2>Five Face-Offs</h2><p>Each round gives you one argument for annexation and one against it. Find the <strong>main reason</strong> behind each argument, then save the one you may use as evidence.</p></div><div class="chapterIcon">VS</div></div>
+    <div class="debateIntro">
+      <div id="roundHost"></div>
+      <aside class="locker"><div class="lockerHead"><h3>Evidence Locker</h3><span class="lockerCount" id="lockerCount">0/5 saved</span></div><div class="lockerItems" id="lockerItems"><div class="lockerEmpty">Nothing saved yet. After each face-off, save one argument you could use on your organizer.</div></div><div class="actionRow"><button class="primary hidden" id="debateNext" onclick="showScreen('final')">Final decision →</button></div></aside>
+    </div>
+  </section>
+
+  <section class="screen" id="final">
+    <div class="chapterHead"><div><div class="chapterNo">Dossier 04 · Final Decision</div><h2>Empire or Republic?</h2><p>Choose what the U.S. should do, then pick <strong>two pieces of evidence</strong> from your locker. On your organizer, explain how each piece supports your claim.</p></div><div class="chapterIcon">04</div></div>
+    <div class="panel panelPad">
+      <div class="finalChoice"><button class="decision" id="annexDecision" onclick="chooseDecision('annex')"><h3>Annex the Philippines</h3><p>Keep the Philippines under U.S. control for military, trade, or national-power reasons.</p></button><button class="decision" id="indDecision" onclick="chooseDecision('independence')"><h3>Recognize Filipino Independence</h3><p>Let Filipinos govern themselves because of self-government, American ideals, or Filipino independence.</p></button></div>
+      <div class="panelLabel" style="margin-top:22px">Choose 2 pieces of evidence</div><div class="evidenceFinal" id="finalEvidence"></div><div class="finalPrompt hidden" id="finalPrompt"></div><div class="actionRow"><span class="micro">No typing here. Write your finished claim on the graphic organizer.</span><button class="primary hidden" id="finishBtn" onclick="finishGame()">Reveal what happened →</button></div>
+    </div>
+  </section>
+
+  <section class="screen" id="results">
+    <div class="result">
+      <div class="kicker">Dossier Complete</div><div class="rank" id="rank">Policy Adviser</div><div id="scoreLine" style="color:#d3deea;font-weight:800"></div><div class="badges" id="badges"></div>
+      <div class="historyReveal"><h3>What actually happened?</h3><p>The Senate approved the Treaty of Paris on <strong>February 6, 1899</strong>. The Philippines came under U.S. rule. Fighting between U.S. and Filipino forces had already begun on <strong>February 4</strong>. Americans kept arguing: Did expansion make the U.S. stronger, or did it go against American ideas about self-government?</p><p><strong>Organizer finish:</strong> Write your claim and explain how your two pieces of evidence support it.</p></div>
+      <div class="actionRow"><button class="ghost" onclick="resetGame()">Restart review</button></div>
+      <div class="sources"><details><summary>Historical image & content sources</summary><ul>
+        <li>Louis Dalrymple, <em>School Begins</em>, <em>Puck</em>, Jan. 25, 1899 — Library of Congress, LC-DIG-ppmsca-28668.</li>
+        <li>Udo J. Keppler, <em>Puck</em>, Feb. 27, 1901 — Wikimedia Commons scan of the period cartoon.</li>
+        <li><em>Greater America</em> map, 1899 — public-domain scan on Wikimedia Commons.</li>
+        <li>Territorial outcomes and Treaty of Paris background: U.S. Department of State Office of the Historian / Library of Congress.</li>
+        <li>Speaker language is deliberately labeled as <strong>argument summaries</strong>, not direct quotations.</li>
+      </ul></details></div>
+    </div>
+  </section>
+</main>
+
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()"><div class="modalInner"><img id="modalImg" alt="Enlarged historical image"><button class="closeModal" onclick="closeModal()">Close ✕</button></div></div>
+
+<script>
+const amendments=[
+ {title:'Statement A',year:'April 1898',desc:'Congress says the U.S. does not plan to take Cuba as a permanent possession. After the fighting ends, Cubans should control their own island.',answer:'Teller',explain:'Teller Amendment: the U.S. promised it would not annex Cuba.'},
+ {title:'Statement B',year:'1901',desc:'Cuba can become independent, but the U.S. can step in during serious problems and can use naval bases such as Guantánamo Bay.',answer:'Platt',explain:'Platt Amendment: Cuba was independent, but the U.S. kept the right to step into Cuban affairs.'}
+];
+const territories=[
+ {name:'Cuba',hint:'The U.S. said it was helping Cuba gain freedom from Spain.',options:['Annexed by U.S.','Independent, but with U.S. limits','Returned to Spain'],correct:'Independent, but with U.S. limits',reveal:'Spain gave up control. Cuba became independent, but the Platt Amendment gave the U.S. major power in Cuban affairs.'},
+ {name:'Puerto Rico',hint:'Caribbean island taken from Spain during the war.',options:['Annexed by U.S.','Immediate independence','Returned to Spain'],correct:'Annexed by U.S.',reveal:'Spain gave Puerto Rico to the United States in the Treaty of Paris.'},
+ {name:'Guam',hint:'Pacific island useful for ships and naval routes.',options:['Annexed by U.S.','Immediate independence','Transferred to Cuba'],correct:'Annexed by U.S.',reveal:'Spain gave Guam to the United States in the Treaty of Paris.'},
+ {name:'Philippines',hint:'Filipinos were already fighting for independence.',options:['Ceded to U.S. for $20 million','Immediate independence','Returned to Spain'],correct:'Ceded to U.S. for $20 million',reveal:'Spain gave the Philippines to the United States, and the U.S. paid Spain $20 million. Filipinos still wanted independence.'}
+];
+const speakers={
+ mckinley:{name:'William McKinley',role:'President of the United States',img:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Wmckinley.jpeg',side:'Annexation',motive:'Order / Responsibility',argument:'The U.S. now has a responsibility in the Philippines. Leaving right away could lead to disorder. American rule could help build a stable government.',note:'Summary of McKinley’s argument.'},
+ bryan:{name:'William Jennings Bryan',role:'Democratic leader',img:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Bryan_1896.jpg',side:'Anti-annexation',motive:'Self-Government / U.S. Ideals',argument:'The U.S. says government should depend on the people’s consent. It is wrong to rule Filipinos if they do not agree to U.S. control.',note:'Summary of Bryan’s anti-imperialist argument.'},
+ beveridge:{name:'Albert J. Beveridge',role:'U.S. Senator · Indiana',img:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Albert_J._Beveridge,_1899.jpg',side:'Annexation',motive:'Trade / Asian Markets',argument:'The Philippines could give the U.S. better access to trade in Asia, especially China, and make America more powerful in the Pacific.',note:'Summary of Beveridge’s expansionist argument.'},
+ carnegie:{name:'Andrew Carnegie',role:'Industrialist · Anti-Imperialist',img:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Andrew_Carnegie_by_Rockwood,_1900.jpg',side:'Anti-annexation',motive:'Cost / Problems of Empire',argument:'Keeping the Philippines could cost the U.S. a lot of money and soldiers. Empire might bring more problems than benefits.',note:'Summary of Carnegie’s anti-imperialist argument.'},
+ mahan:{name:'Alfred Thayer Mahan',role:'Naval strategist',img:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Alfred_Thayer_Mahan_1904.jpg',side:'Annexation',motive:'Navy / Strategy',argument:'American trade needs a strong navy. A strong navy needs bases. The Philippines could give the U.S. an important base in the Pacific.',note:'Summary of Mahan’s sea-power argument.'},
+ hoar:{name:'George Frisbie Hoar',role:'U.S. Senator · Massachusetts',img:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Senator_George_Frisbie_Hoar,_full-length_portrait,_standing,_facing_slightly_right_LCCN99471547.jpg',side:'Anti-annexation',motive:'War / Human Cost',argument:'Filipinos were fighting for independence. If the U.S. forced them to accept American rule, a war could kill many people and turn liberation into conquest.',note:'Summary of Hoar’s anti-annexation argument.'},
+ roosevelt:{name:'Theodore Roosevelt',role:'Expansionist politician',img:'https://commons.wikimedia.org/wiki/Special:Redirect/file/President_Roosevelt_-_Pach.jpg',side:'Annexation',motive:'National Power / Status',argument:'Strong nations should not back away from hard challenges. Keeping the Philippines could show American strength and increase U.S. power.',note:'Summary of Roosevelt’s expansionist argument.'},
+ schurz:{name:'Carl Schurz',role:'Former senator · reformer',img:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Portrait_of_Carl_Schurz.jpg',side:'Anti-annexation',motive:'Self-Government / U.S. Ideals',argument:'Americans once fought against rule without representation. The U.S. should not rule Filipinos without their consent.',note:'Summary of Schurz’s anti-imperialist argument.'},
+ lodge:{name:'Henry Cabot Lodge',role:'U.S. Senator · Massachusetts',img:'https://commons.wikimedia.org/wiki/Special:Redirect/file/HenryCabotLodgeSr.jpg',side:'Annexation',motive:'Navy / Strategy',argument:'The Philippines gives the U.S. an important position in the Pacific. If America leaves, another powerful country might take control.',note:'Summary of Lodge’s expansionist argument.'},
+ aguinaldo:{name:'Emilio Aguinaldo',role:'Leader of the Philippine Republic',img:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Emilio_Aguinaldo_(ca._1898).jpg',side:'Anti-annexation',motive:'Filipino Independence',argument:'Filipinos fought Spain, declared independence, and created their own government. They did not fight to trade Spanish rule for American rule.',note:'Summary of the Filipino independence argument.'}
+};
+const rounds=[
+ {a:'mckinley',b:'bryan',title:'Round 1 · Responsibility vs. Self-Government'},
+ {a:'beveridge',b:'carnegie',title:'Round 2 · Trade vs. Cost'},
+ {a:'mahan',b:'hoar',title:'Round 3 · Navy vs. Human Cost'},
+ {a:'roosevelt',b:'schurz',title:'Round 4 · Power vs. American Ideals'},
+ {a:'lodge',b:'aguinaldo',title:'Round 5 · Pacific Power vs. Filipino Independence'}
+];
+const motivePool=['Trade / Asian Markets','Navy / Strategy','Order / Responsibility','National Power / Status','Self-Government / U.S. Ideals','War / Human Cost','Cost / Problems of Empire','Filipino Independence'];
+let state={mode:'academic',xp:0,amendDone:0,territoriesDone:0,cubaCartoon:false,philCartoon:false,round:0,roundAnswers:{},bankedRound:{},saved:[],decision:null,finalEv:[]};
+
+function setMode(m){state.mode=m;document.getElementById('academicMode').classList.toggle('selected',m==='academic');document.getElementById('honorsMode').classList.toggle('selected',m==='honors');}
+function startGame(){document.body.classList.toggle('academic',state.mode==='academic');document.getElementById('topbar').classList.remove('hidden');showScreen('cuba');renderAmendments();}
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});if(id==='cubaCartoon')renderCubaCartoon();if(id==='treaty')renderTerritories();if(id==='philippinesVisual')renderPhilCartoon();if(id==='debate')renderRound();if(id==='final')renderFinalEvidence();updateHud(id);}
+function updateHud(id){document.getElementById('xp').textContent=state.xp;document.getElementById('evCount').textContent=state.saved.length;const map={cuba:1,cubaCartoon:1,treaty:2,philippinesVisual:3,debate:3,final:4,results:4};const n=map[id]||0;for(let i=1;i<=4;i++)document.getElementById('dot'+i).classList.toggle('on',i<=n);}
+function award(ok,pts=100){if(ok)state.xp+=pts;document.getElementById('xp').textContent=state.xp;}
+
+function renderAmendments(){const grid=document.getElementById('amendmentGrid');grid.innerHTML='';state.amendDone=0;amendments.forEach((a,i)=>{const d=document.createElement('div');d.className='amendment';d.innerHTML=`<div class="year">${a.year}</div><h3>${a.title}</h3><p>${a.desc}</p><div class="dropLabel">Which amendment?</div><div class="tagChoice"><button class="tagBtn" data-v="Teller">Teller</button><button class="tagBtn" data-v="Platt">Platt</button></div>`;d.querySelectorAll('.tagBtn').forEach(b=>b.onclick=()=>answerAmend(i,b,d));grid.appendChild(d);});}
+function answerAmend(i,b,card){if(card.dataset.done)return;card.dataset.done='1';const a=amendments[i],ok=b.dataset.v===a.answer;award(ok,100);card.querySelectorAll('.tagBtn').forEach(x=>{x.disabled=true;if(x.dataset.v===a.answer)x.classList.add('correct')});if(!ok)b.classList.add('wrong');state.amendDone++;const f=document.getElementById('amendFeedback');f.innerHTML=`<b>${ok?'+100 XP · Correct.':'Correction:'}</b> ${a.explain}`;f.classList.add('show');if(state.amendDone===2)document.getElementById('cubaNext').classList.remove('hidden');}
+
+function renderCubaCartoon(){const opts=[['By 1901, the U.S. had completely stopped getting involved in Cuba',false],['Cuba was independent, but the U.S. still acted like it had the right to guide or control Cuba',true],['The cartoon says Spain should take Cuba back',false],['Cuba had become a U.S. state',false]];renderCartoonChoices('cubaCartoonChoices','cubaCartoonFeedback','cartoonNext',opts,'The adult/child setup suggests that the U.S. saw Cuba as needing American guidance. Cuba had self-government, but the U.S. still kept power to intervene.');}
+function renderPhilCartoon(){const opts=[['The U.S. immediately gave all new territories equal self-government',false],['U.S. imperialism could go against the idea that people should agree to their government',true],['The cartoon says the Philippines had already become a U.S. state',false],['The main issue was whether Spain should take Hawaii',false]];renderCartoonChoices('philCartoonChoices','philCartoonFeedback','philCartoonNext',opts,'The cartoon points out a problem: the U.S. taught “self-government” while also ruling new territories without asking the people who lived there.');}
+function renderCartoonChoices(hostId,fbId,nextId,opts,explain){const host=document.getElementById(hostId);host.innerHTML='';const fb=document.getElementById(fbId);fb.className='feedback';document.getElementById(nextId).classList.add('hidden');opts.forEach(([txt,ok])=>{const b=document.createElement('button');b.className='darkChoice';b.textContent=txt;b.onclick=()=>{if(host.dataset.done)return;host.dataset.done='1';award(ok,125);[...host.children].forEach((x,idx)=>{x.disabled=true;if(opts[idx][1])x.classList.add('correct')});if(!ok)b.classList.add('wrong');fb.innerHTML=`<b>${ok?'+125 XP · Correct.':'Not quite.'}</b> ${explain}`;fb.classList.add('show');document.getElementById(nextId).classList.remove('hidden');};host.appendChild(b);});host.dataset.done='';}
+
+function renderTerritories(){state.territoriesDone=0;const grid=document.getElementById('territoryGrid');grid.innerHTML='';territories.forEach((t,i)=>{const d=document.createElement('div');d.className='territory';d.innerHTML=`<div class="territoryTop"><h3>${t.name}</h3><span style="font-weight:950;color:#9e4444">1898</span></div><div class="mini">${t.hint}</div><div class="outcomes"></div><div class="reveal">${t.reveal}</div>`;const out=d.querySelector('.outcomes');t.options.forEach(o=>{const b=document.createElement('button');b.className='pill';b.textContent=o;b.onclick=()=>{if(d.dataset.done)return;d.dataset.done='1';const ok=o===t.correct;award(ok,100);[...out.children].forEach(x=>{x.disabled=true;if(x.textContent===t.correct)x.classList.add('correct')});if(!ok)b.classList.add('wrong');d.querySelector('.reveal').classList.add('show');state.territoriesDone++;if(state.territoriesDone===4)document.getElementById('treatyNext').classList.remove('hidden');};out.appendChild(b)});grid.appendChild(d);});}
+
+function speakerCard(key,slot){const s=speakers[key];const choices=getMotiveChoices(s.motive,key);return `<div class="speakerCard"><div class="speakerVisual"><img src="${s.img}" alt="Portrait of ${s.name}" onerror="this.style.display='none'"><div class="speakerName"><h4>${s.name}</h4><span>${s.role}</span></div></div><div class="speakerBody"><span class="stanceTag">${s.side}</span><div class="argument">${s.argument}</div><div class="argNote">${s.note} · <strong>Argument summary—not a direct quotation.</strong></div><div class="motiveLabel">Main reason?</div><div class="motiveChoices">${choices.map(m=>`<button class="motiveBtn" data-slot="${slot}" data-key="${key}" data-motive="${m.replaceAll('"','&quot;')}">${m}</button>`).join('')}</div></div></div>`}
+function getMotiveChoices(correct,key){if(state.mode==='honors'){const others=shuffle(motivePool.filter(x=>x!==correct)).slice(0,4);return shuffle([correct,...others]);}const distractors=motivePool.filter(x=>x!==correct);return shuffle([correct,...shuffle(distractors).slice(0,2)]);}
+function shuffle(a){return a.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(x=>x[1]);}
+function renderRound(){const r=rounds[state.round];document.getElementById('roundHost').innerHTML=`<div class="roundWrap"><div class="roundHeader"><b>${r.title}</b><span>${state.round+1} of ${rounds.length}</span></div><div class="faceoff">${speakerCard(r.a,'a')}<div class="vs"><span>VS</span></div>${speakerCard(r.b,'b')}</div><div class="roundFeedback" id="roundFeedback"></div><div class="bankBar" id="bankBar"><span>Save ONE argument for your final evidence locker.</span><div class="bankBtns"><button class="bankBtn" data-bank="${r.a}">${speakers[r.a].name}</button><button class="bankBtn" data-bank="${r.b}">${speakers[r.b].name}</button></div></div><div class="actionRow"><button class="primary hidden right" id="roundNext">${state.round===rounds.length-1?'Finish debate →':'Next face-off →'}</button></div></div>`;
+ document.querySelectorAll('.motiveBtn').forEach(b=>b.onclick=()=>answerMotive(b));document.querySelectorAll('.bankBtn').forEach(b=>b.onclick=()=>bankEvidence(b.dataset.bank,b));document.getElementById('roundNext').onclick=()=>{state.round++;if(state.round<rounds.length)renderRound();else{document.getElementById('debateNext').classList.remove('hidden');updateLocker();window.scrollTo({top:0,behavior:'smooth'});}};updateLocker();}
+function answerMotive(b){const slot=b.dataset.slot,key=b.dataset.key,correct=speakers[key].motive;const token=state.round+'-'+slot;if(state.roundAnswers[token])return;state.roundAnswers[token]=true;const ok=b.dataset.motive===correct;award(ok,state.mode==='honors'?125:100);document.querySelectorAll(`.motiveBtn[data-slot="${slot}"]`).forEach(x=>{x.disabled=true;if(x.dataset.motive===correct)x.classList.add('correct')});if(!ok)b.classList.add('wrong');const r=rounds[state.round];const both=state.roundAnswers[state.round+'-a']&&state.roundAnswers[state.round+'-b'];const f=document.getElementById('roundFeedback');f.innerHTML=`<b>${ok?'+ XP · Correct main reason.':'Best answer: '+correct+'.'}</b> ${both?'You found both main reasons. Now save the argument that may be most useful as evidence.':''}`;f.classList.add('show');if(both)document.getElementById('bankBar').classList.add('show');}
+function bankEvidence(key,b){const r=rounds[state.round];const current=[r.a,r.b];state.saved=state.saved.filter(k=>!current.includes(k));state.saved.push(key);document.querySelectorAll('.bankBtn').forEach(x=>x.classList.toggle('saved',x.dataset.bank===key));if(!state.bankedRound[state.round]){award(true,50);state.bankedRound[state.round]=true;}updateLocker();document.getElementById('roundNext').classList.remove('hidden');}
+function updateLocker(){const h=document.getElementById('lockerItems');document.getElementById('lockerCount').textContent=`${state.saved.length}/5 saved`;document.getElementById('evCount').textContent=state.saved.length;if(!state.saved.length){h.innerHTML='<div class="lockerEmpty">Nothing saved yet. After each face-off, save one argument you could use on your organizer.</div>';return;}h.innerHTML=state.saved.map(k=>`<div class="lockerItem"><strong>${speakers[k].name}</strong> · ${speakers[k].motive}</div>`).join('');if(state.saved.length===5&&state.round>=rounds.length)document.getElementById('debateNext').classList.remove('hidden');}
+
+function chooseDecision(d){state.decision=d;document.getElementById('annexDecision').classList.toggle('selected',d==='annex');document.getElementById('indDecision').classList.toggle('selected',d==='independence');updateFinal();}
+function renderFinalEvidence(){const h=document.getElementById('finalEvidence');h.innerHTML=state.saved.map(k=>`<button class="finalEv" data-key="${k}"><strong>${speakers[k].name}</strong><br>${speakers[k].motive}: ${speakers[k].argument}</button>`).join('');document.querySelectorAll('.finalEv').forEach(b=>b.onclick=()=>toggleFinalEvidence(b.dataset.key,b));updateFinal();}
+function toggleFinalEvidence(k,b){const i=state.finalEv.indexOf(k);if(i>=0){state.finalEv.splice(i,1);b.classList.remove('selected')}else if(state.finalEv.length<2){state.finalEv.push(k);b.classList.add('selected')}updateFinal();}
+function updateFinal(){const ready=state.decision&&state.finalEv.length===2;document.getElementById('finishBtn').classList.toggle('hidden',!ready);document.getElementById('finalPrompt').classList.toggle('hidden',!ready);if(ready){const side=state.decision==='annex'?'annex the Philippines':'recognize Filipino independence';const names=state.finalEv.map(k=>speakers[k].name).join(' and ');document.getElementById('finalPrompt').innerHTML=`<b>WRITE ON YOUR ORGANIZER:</b><br>Although ____________, the United States should <u>${side}</u> because ____________ and ____________.<br><span style="font-family:Inter,sans-serif;font-size:.78rem;color:#626d7b">Evidence selected: ${names}. Explain how each one supports your claim.</span>`;}}
+function finishGame(){award(true,200);showScreen('results');const max=state.mode==='honors'?2550:2300;const pct=Math.round((state.xp/max)*100);let rank='Policy Adviser';if(pct>=90)rank='Senate Floor Leader';else if(pct>=75)rank='History Strategist';else if(pct<60)rank='War Correspondent';document.getElementById('rank').textContent=rank;document.getElementById('scoreLine').textContent=`${state.xp} XP · ${pct}% · ${state.saved.length} debate arguments banked`;document.getElementById('badges').innerHTML=['Cuba Policy Decoder','Treaty Mapper','Cartoon Reader','Debate Evidence Builder'].map(x=>`<span class="badge">${x}</span>`).join('');}
+function resetGame(){state={mode:state.mode,xp:0,amendDone:0,territoriesDone:0,cubaCartoon:false,philCartoon:false,round:0,roundAnswers:{},bankedRound:{},saved:[],decision:null,finalEv:[]};document.getElementById('topbar').classList.add('hidden');document.body.classList.remove('academic');showScreen('intro');setMode(state.mode);}
+function openModal(src){document.getElementById('modalImg').src=src;document.getElementById('modal').classList.add('show')}
+function closeModal(){document.getElementById('modal').classList.remove('show')}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+</script>
+</body>
+</html>
